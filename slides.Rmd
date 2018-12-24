@@ -2,3 +2,12 @@ https://s3.amazonaws.com/assets.datacamp.com/production/course_7028/slides/chapt
 https://s3.amazonaws.com/assets.datacamp.com/production/course_7028/slides/chapter2.pdf
 https://s3.amazonaws.com/assets.datacamp.com/production/course_7028/slides/chapter3.pdf
 https://s3.amazonaws.com/assets.datacamp.com/production/course_7028/slides/chapter4.pdf
+
+```{r}
+library(tidyverse)
+library(glue)
+list.files('docs') %>% 
+    file.path('docs',.) %>% 
+    file.rename(.,glue('docs/chapter{1:4}.pdf'))
+```
+

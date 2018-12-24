@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+    bookdown::html_document2: default
+    github_document: default
 ---
 
 explain the importance of this topic, and provide a quick introduction to the theory behind survival curves. 
@@ -15,6 +17,8 @@ We also discuss how we describe the distribution of the elapsed time until an ev
 
 以下例子说明
 
+# 直观理解
+
 ```{r fig.cap='一个人距离死亡的时间'}
 knitr::include_graphics('figure/timeto_0.png')
 ```
@@ -27,3 +31,82 @@ knitr::include_graphics('figure/timeto_fa-desktop.png')
 knitr::include_graphics('figure/timeto_fa-taxi.png')
 ```
 
+# 比ols的优势
+
+先要从数据的性质出发
+
+1. 时间都是正数，因此不满足正态分布假设，OLS不成立
+1. (right) censoring，如图 \@ref(fig:censoringplot)，id2 和 id3 实际上还死亡，因此没有产生对应的时间
+
+```{r censoringplot,fig.cap='right censoring 举例'}
+knitr::include_graphics('figure/timeto_1q.png')
+```
+
+由于 id2 和 id3 情况特殊，因此会使用 event 标签 进行区别。
+
+```{r eval=F}
+library(survival)
+library(tidyverse)
+data_frame(
+    time = c(5,6,3,4,4)
+    ,event = c(1,0,0,1,1)
+) %>% 
+Surv(.$time,.$event)
+```
+
+in pipeline is wrong.
+ask [RStudio Community](https://community.rstudio.com/)
+
+```{r}
+time <- c(5, 6, 2, 4, 4) 
+event <- c(1, 0, 0, 1, 1)
+library("survival") 
+Surv(time, event)
+```
+
+这种表达方式，可以作为特征变量引入。
+
+```{r}
+data(GBSG2, package = "TH.data")
+```
+
+```{r}
+library(tidyverse)
+GBSG2 %>% head
+```
+
+>
+This information is stored in the `censor1` variable, which has a value of `1` if an individual was re-employed at a full-time job. The `spell` variable indicates the length of time an individual was unemployed in number of two-week intervals.
+
+```{r}
+data(UnempDur, package = "Ecdat")
+```
+
+# 生存分析常回答的问题
+
+>
+1. What is the probability that a breast cancer patient survives longer than 5 years?
+1. What is the typical waiting time for a cab?
+1. Out of 100 unemployed people, how many do we expect to have a job again after 2 months?
+
+```{r}
+knitr::include_graphics('figure/survival_fct.png')
+```
+
+$$S(t) = P (T > t) = 1 - P(T < t)$$
+
+$P(T < t)$类似于CDF
+
+<input type="checkbox" id="checkbox1" class="styled">查看主营生存时间
+time 注册距离最大log时间
+event 今天还有没有记录
+
+
+```{r fig.cap='有50%的人生存超过了3.7年'}
+knitr::include_graphics('figure/survival_fct_median.png')
+```
+
+
+```{r fig.cap='超过4年以上生存时间的有37%'}
+knitr::include_graphics('figure/survival_fct_t4.png')
+```
