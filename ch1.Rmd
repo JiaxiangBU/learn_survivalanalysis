@@ -1,0 +1,29 @@
+---
+output: github_document
+---
+
+explain the importance of this topic, and provide a quick introduction to the theory behind survival curves. 
+
+discuss why special methods are needed when dealing with time-to-event data and introduce the concept of censoring. 
+
+We also discuss how we describe the distribution of the elapsed time until an event.
+
+网速不行
+
+真正关心的是
+一个事件将要发生的等待时间。
+
+以下例子说明
+
+```{r fig.cap='一个人距离死亡的时间'}
+knitr::include_graphics('figure/timeto_0.png')
+```
+
+```{r fig.cap='一个人再次找到工作的时间'}
+knitr::include_graphics('figure/timeto_fa-desktop.png')
+```
+
+```{r fig.cap='一个人打到车的时间'}
+knitr::include_graphics('figure/timeto_fa-taxi.png')
+```
+
