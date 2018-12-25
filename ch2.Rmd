@@ -24,12 +24,98 @@ $$\begin{alignat}{2}
 \hat S(3) &= \frac{4-0}{4} = 1 \\
 \hat S(4) &= \frac{4-2}{4} = 0.5 \\
 \hat S(5) &= 0.5 \frac{2-1}{2} = 0.25 \\
-\hat S(5) &= 0.25 \frac{1-0}{1} = 0.25 \\
+\hat S(6) &= 0.25 \frac{1-0}{1} = 0.25 \\
 \end{alignat}$$
 
+survminer 参考[rpkgs](https://rpkgs.datanovia.com/survminer/reference/ggsurvplot.html)
+
 ```{r}
+time <- c(5, 6, 2, 4, 4) 
+event <- c(1, 0, 0, 1, 1)
+library(survival)
 km <- survfit(Surv(time, event) ~ 1)
-ggsurvplot(km, conf.int = FALSE, risk.table = "nrisk_cumevents", legend = "none")
+library(survminer)
+# ggsurvplot(km, conf.int = FALSE, risk.table = "nrisk_cumevents", legend = "none")
 ```
 
 <input type="checkbox" id="checkbox1" class="styled">ggsurvplot where
+
+Number at risk = number of event
+这是很直观的表达
+`legend = "none"`是因为只有一条线，不需要legend
+
+报错见[RStudio Community](https://community.rstudio.com/t/questions-for-the-input-of-function-survminer-ggsurvplot/20461)
+
+1. `Surv()` is used to define the time-to-event outcome, 
+1. `survreg()` can be used to estimate a Weibull model (see upcoming lessons), and with 
+1. `survfit()` you can estimate survival curves, e.g. with the Kaplan-Meier technique.
+
+extract relevant information from a `survfit` object.
+
+```{r}
+library(tidyverse)
+str(km)
+data.frame(
+    time = km$time
+    ,n.risk = km$n.risk
+    ,n.event = km$n.event
+    ,n.censor = km$n.censor
+    ,surv = km$surv
+    )
+```
+
+<input type="checkbox" id="checkbox1" class="styled">`n.censor` meaning
+
+# ggsurvplot
+
+```{r eval=F}
+ggsurvplot(
+  fit = km, 
+  palette = "blue", 
+  linetype = 1, 
+  surv.median.line = "hv", 
+  risk.table = TRUE,
+  cumevents = TRUE, 
+  cumcensor = TRUE,
+  tables.height = 0.1
+)
+```
+
+`surv.median.line = "hv"`给出50%点的展示方式
+
+```{r}
+knitr::include_graphics('figure/gbsg2_km.png')
+```
+
+目前的心得是，如果是在观察期最后没有反馈结果，那么就不计入算死亡率。
+
+time 不一样是因为开始时间不一样。
+
+>
+The `Surv()` function can also take only one argument if there is no censoring, i.e. `Surv(time)`.
+
+```{r}
+# Create dancedat data
+dancedat <- data.frame(
+  name = c("Chris", "Martin", "Conny", "Desi", "Reni", "Phil", 
+    "Flo", "Andrea", "Isaac", "Dayra", "Caspar"),
+  time = c(20, 2, 14, 22, 3, 7, 4, 15, 25, 17, 12),
+  obs_end = c(1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0))
+
+# Estimate the survivor function pretending that all censored observations are actual observations.
+km_wrong <- survfit(Surv(time) ~ 1, data = dancedat)
+
+# Estimate the survivor function from this dataset via kaplan-meier.
+km <- survfit(Surv(time, obs_end) ~ 1, data = dancedat)
+
+# Plot the two and compare
+ggsurvplot_combine(list(correct = km, wrong = km_wrong))
+```
+
+
+>
+how ignoring censoring underestimates your friends' dancing stamina? The correct analysis (red curve) shows that your friends actually dance longer than the incorrect blue curve suggests.
+
+的确，不考虑censoring的情况，实际上会低估跳舞时间，这是特征变量计算的一个需要注意的地方。
+
+可以计算下主营的注册时间
