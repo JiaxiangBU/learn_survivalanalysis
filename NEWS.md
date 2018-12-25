@@ -1,7 +1,8 @@
 ### 2018-12-25 21:57:51
 
-finish ch3
-add ch4
+1. finish ch3
+1. add ch4
+1. add file type for ch 1-4
 
 ### 2018-12-25 18:23:05
 

@@ -1,3 +1,9 @@
+---
+output: 
+    bookdown::html_document2: default
+    github_document: default
+---
+
 之前
 [第一章](ch1.md)
 和

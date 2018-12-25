@@ -1,0 +1,5 @@
+---
+output: 
+    bookdown::html_document2: default
+    github_document: default
+---
