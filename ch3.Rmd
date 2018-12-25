@@ -1,0 +1,96 @@
+之前
+[第一章](ch1.md)
+和
+[第二章](ch2.md)
+都在讨论一个生存模型中Y的构建。
+其实Y的特殊之处在于，增加了right censoring `+` 这样一个特性，其实对x等的计算还没有实现。
+
+之前提到的 covariates，其实就是x变量，
+见[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=1)
+
+实际上和OLS很类似，因此是很容易掌握的。
+
+```{r}
+wbmod <- survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+coef(wbmod)
+```
+
+1. horThyes: hormonal therapy 性激素治疗
+1. tsize: tumor size 肿瘤大小
+
+```{r}
+library(data.table)
+dat <- N
+    fread('data/dat.csv') %>% 
+    select(-V1)
+```
+
+```{r}
+# Look at the data set
+str(dat)
+
+# Estimate a Weibull model
+wbmod <- survreg(Surv(time, status) ~ sex, data = dat)
+coef(wbmod)
+```
+
+```{r}
+# Weibull model
+wbmod <- survreg(Surv(time, cens) ~ horTh, data = GBSG2)
+
+# Retrieve survival curve from model
+surv <- seq(.99, .01, by = -.01)
+t_yes <- predict(wbmod, type = "quantile", p = 1 - surv,
+  newdata = data.frame(horTh = "yes"))
+
+# Take a look at survival curve
+str(t_yes)
+```
+
+`data.frame(horTh = "yes")`给出x。
+
+```{r}
+# Weibull model
+wbmod <- survreg(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+# Imaginary patients
+newdat <- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75)))
+
+# Compute survival curves
+surv <- seq(.99, .01, by = -.01)
+t <- predict(wbmod, type = 'quantile', p = 1 - surv,
+  newdata = newdat)
+
+# How many rows and columns does t have?
+dim(t)
+```
+
+1. 这里分类变量的方法非常的舒服。
+1. `levels`的方式也比`distinct`更加的全面
+1. 这里适合处理生存模型中连续变量的**展示**
+1. 一种情况是一行
+
+```{r}
+# Use cbind() to combine the information in newdat with t
+surv_wbmod_wide <- cbind(newdat, t)
+  
+# Use melt() to bring the data.frame to long format
+surv_wbmod <- surv_wbmod_wide %>% gather(surv_id,time,-horTh,-tsize)
+
+# Use surv_wbmod$surv_id to add the correct survival probabilities surv
+surv_wbmod$surv <- surv[as.numeric(surv_wbmod$surv_id)]
+
+# Add columns upper, lower, std.err, and strata to the data.frame
+surv_wbmod[, c("upper", "lower", "std.err", "strata")] <- NA
+
+# Plot the survival curves
+ggsurvplot_df(surv_wbmod, surv.geom = geom_line,
+  linetype = "horTh", color = "tsize", legend.title = NULL)
+```
+
+https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9
+
+Other distributions than Weibull
+书签
