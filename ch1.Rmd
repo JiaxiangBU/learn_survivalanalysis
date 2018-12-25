@@ -95,7 +95,7 @@ knitr::include_graphics('figure/survival_fct.png')
 
 $$S(t) = P (T > t) = 1 - P(T < t)$$
 
-$P(T < t)$类似于CDF
+$P(T < t)$类似于CDF，因此$S(t)$是非常直观便于理解的。
 
 <input type="checkbox" id="checkbox1" class="styled">查看主营生存时间
 time 注册距离最大log时间
