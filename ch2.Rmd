@@ -119,3 +119,80 @@ how ignoring censoring underestimates your friends' dancing stamina? The correct
 的确，不考虑censoring的情况，实际上会低估跳舞时间，这是特征变量计算的一个需要注意的地方。
 
 可以计算下主营的注册时间
+
+```{r}
+# Kaplan-Meier estimate
+km <- survfit(Surv(time,cens) ~ 1,data=GBSG2)
+
+# plot of the Kaplan-Meier estimate
+ggsurvplot(km,GBSG2)
+
+# add the risk table to plot
+ggsurvplot(km,GBSG2,risk.table = TRUE)
+
+# add a line showing the median survival time
+ggsurvplot(km,GBSG2,risk.table = TRUE,surv.median.line='hv')
+```
+
+`risk.table`下方是时间，上方是 n at risk
+
+# Weibull 模型
+
+1. Kaplan-Meier模型更适用于描述性统计，并且都是step进行类似于histogram图
+1. Weibull模型，更加的smooth
+
+```{r}
+# Weibull model
+wb <- survreg(Surv(time, cens) ~ 1, data = GBSG2)
+
+# Compute the median survival from the model
+predict(wb, type = "quantile", p = 1 - 0.5, newdata = data.frame(1))
+```
+
+```{r}
+# Weibull model
+wb <- survreg(Surv(time, cens) ~ 1, data = GBSG2)
+
+# 70 Percent of patients survive beyond time point...
+predict(wb, type = 'quantile', p = 1-0.7, newdata = data.frame(1))
+```
+
+`predict`中的参数`p`是向量化的。
+
+```{r}
+# Weibull model
+wb <- survreg(Surv(time, cens) ~ 1, data=GBSG2)
+
+# Retrieve survival curve from model probabilities 
+surv <- seq(.99, .01, by = -.01)
+
+# Get time for each probability
+t <- predict(wb, type = 'quantile', p = 1-surv, newdata = data.frame(1))
+
+# Create data frame with the information
+surv_wb <- data.frame(time = t, surv = surv)
+
+# Look at first few lines of the result
+head(surv_wb)
+```
+
+<input type="checkbox" id="checkbox1" class="styled">covariates 一直在提到，会更加难。
+
+```{r}
+# Weibull model
+wb <- survreg(Surv(time, cens) ~ 1, GBSG2)
+
+# Retrieve survival curve from model
+surv <- seq(.99, .01, by = -.01)
+
+# Get time for each probability
+t <- predict(wb, type = 'quantile', p = 1-surv, newdata = data.frame(1))
+
+# Create data frame with the information needed for ggsurvplot_df
+surv_wb <- data.frame(time = t, surv = surv, 
+  upper = NA, lower = NA, std.err = NA)
+
+# Plot
+ggsurvplot_df(fit = surv_wb, surv.geom = geom_line)
+```
+
