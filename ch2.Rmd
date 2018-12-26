@@ -1,3 +1,9 @@
+---
+output: 
+    bookdown::html_document2: default
+    github_document: default
+---
+
 https://campus.datacamp.com/courses/survival-analysis-in-r/estimation-of-survival-curves?ex=1
 
 Kaplan-Meier estimate

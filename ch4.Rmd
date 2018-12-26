@@ -1,0 +1,11 @@
+---
+output: 
+    bookdown::html_document2: default
+    github_document: default
+---
+
+The Cox Model
+
+https://campus.datacamp.com/courses/survival-analysis-in-r/the-cox-model?ex=1
+
+没有视频看起来很慢

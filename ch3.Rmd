@@ -1,3 +1,9 @@
+---
+output: 
+    bookdown::html_document2: default
+    github_document: default
+---
+
 之前
 [第一章](ch1.md)
 和
@@ -90,6 +96,78 @@ ggsurvplot_df(surv_wbmod, surv.geom = geom_line,
   linetype = "horTh", color = "tsize", legend.title = NULL)
 ```
 
-书签
-Other distributions than Weibull
-https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9
+# 其他分布
+
+```{r}
+library(survival)
+survreg(Surv(time, cens) ~ horTh, data = GBSG2)
+survreg(Surv(time, cens) ~ horTh, data = GBSG2,
+dist = "exponential")
+survreg(Surv(time, cens) ~ horTh, data = GBSG2,
+dist = "lognormal")
+```
+
+<input type="checkbox" id="checkbox1" class="styled">为了sql复现，需要翻译模型，给 deployment 包
+
+```{r eval=F}
+?survreg.distributions
+```
+
+These are location-scale families for some transformation of time. 
+
+[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9) 家里网不好，用这个更新
+
+```{r}
+# Weibull model
+wbmod <- survreg(Surv(time, cens) ~ horTh, data = GBSG2)
+
+# Log-Normal model
+lnmod <- survreg(Surv(time, cens) ~ horTh, data = GBSG2, dist = "lognormal")
+
+# Newdata
+newdat <- data.frame(horTh = levels(GBSG2$horTh))
+
+# Surv
+surv <- seq(.99, .01, by = -.01)
+
+# Survival curve from Weibull model and log-normal model
+wbt <- predict(wbmod, type = "quantile", p = 1 - surv, newdata = newdat)
+lnt <- predict(lnmod, type = "quantile", p = 1 - surv, newdata = newdat)
+```
+
+```{r}
+library(tidyverse)
+library(survminer)
+rbind(wbt,lnt) %>% 
+  as.data.frame() %>% 
+  set_names(1:99) %>% 
+  mutate(
+    horTh = rep(newdat$horTh,2)
+  ) %>% 
+  mutate(
+    dist = rep(c('weibull','lognormal'),2)
+  ) %>% 
+  select(horTh,dist,everything()) %>% 
+  gather(surv_id,time,-horTh,-dist) %>% 
+  mutate(surv_id = as.integer(surv_id)) %>% 
+  left_join(
+    data_frame(
+      surv = surv
+      ,surv_id = 1:99
+    )
+    ,by = 'surv_id'
+  ) %>% 
+  mutate(
+    upper = NA
+    ,lower = NA
+    ,std.err = NA
+    ,strata = NA
+  ) %>% 
+  # Plot the survival curves
+  ggsurvplot_df(., surv.geom = geom_line, 
+                linetype = "horTh", color = "dist", legend.title = NULL) +
+  labs(
+    title = 'weibull decreases more'
+    ,caption = 'Made by Jiaxiang Li'
+  )
+```
