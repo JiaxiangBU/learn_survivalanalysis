@@ -2,6 +2,7 @@
 
 1. build task table
 1. clean some tasks
+1. make public
 
 ### 2018-12-26 12:54:09
 
