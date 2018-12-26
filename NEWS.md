@@ -1,3 +1,7 @@
+### 2018-12-26 15:57:56
+
+1. update marketing_analytics.Rmd
+
 ### 2018-12-26 13:04:18
 
 1. build task table
@@ -7,8 +11,6 @@
 1. knit ch2
 1. add cheatsheet
 1. add marketing_analytics.Rmd
-
-
 
 ### 2018-12-26 12:54:09
 
