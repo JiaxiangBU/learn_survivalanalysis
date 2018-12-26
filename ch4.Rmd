@@ -4,8 +4,83 @@ output:
     github_document: default
 ---
 
-The Cox Model
+# Cox 模型
 
-https://campus.datacamp.com/courses/survival-analysis-in-r/the-cox-model?ex=1
+1. Cox 模型是半参数模型(没有截距,[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/the-cox-model?ex=1))，因此相比较于Weibull模型，对于y分布假设更少
+1. proportional hazards assumption 假设了生存曲线是**不交叉**的
+1. Cox 模型的回归系数为负，表示生存时间的延长，和Weibull模型相反
 
-没有视频看起来很慢
+```{r}
+library(survival)
+cxmod <- coxph(Surv(time, cens) ~ horTh, data = GBSG2)
+wbmod <- survreg(Surv(time, cens) ~ horTh, data = GBSG2)
+```
+
+<input type="checkbox" id="checkbox1" class="styled">gbm::coxph		example of boosting the Cox propotional hazards model	(Run demo in console)
+厉害，可以boosting
+
+```{r}
+library(data.table)
+dat <- fread("data/dat2.csv")
+```
+
+```{r}
+# Compute Cox model
+cxmod <- coxph(Surv(time, status) ~ performance, data = dat)
+
+# Show model coefficient
+coef(cxmod)
+```
+
+# 可视化
+
+`survfit`接受`Surv`就是Kaplan-Meier方式，接受`coxph`就是Cox检验。
+
+`strata`的使用就是为了标记，类似于`gather`函数在之前的应用。
+
+```{r}
+# Cox model
+cxmod <- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
+
+# Imaginary patients
+newdat <- expand.grid(
+  horTh = levels(GBSG2$horTh),
+  tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.5, 0.75)))
+rownames(newdat) <- letters[1:6]
+
+# Compute survival curves
+cxsf <- survfit(cxmod, data = GBSG2, newdata = newdat, conf.type = "none")
+
+library(tidyverse)
+library(survminer)
+cxsf$time %>% head
+cxsf$surv %>% head
+```
+
+`m_newdat <- newdat[pid, ]`为了 left join 做准备。
+
+```{r eval=F}
+# Compute data.frame needed for plotting
+surv_cxmod0 <- surv_summary(cxsf)
+
+# Get a character vector of patient letters (patient IDs)
+pid <- as.character(surv_cxmod0$strata)
+
+# Multiple of the rows in newdat so that it fits with surv_cxmod0
+m_newdat <- newdat[pid, ]
+
+# Add patient info to data.frame
+surv_cxmod <- cbind(surv_cxmod0, m_newdat)
+
+# Plot
+ggsurvplot_df(surv_cxmod, linetype = 'horTh', color = 'tsize',
+  legend.title = NULL, censor = FALSE)
+```
+
+相关报错已经提交[Github Issue](https://github.com/kassambara/survminer/issues/355)
+
+https://campus.datacamp.com/courses/survival-analysis-in-r/the-cox-model?ex=7
+
+<input type="checkbox" id="checkbox1" class="styled">感觉这个思想可以应用于 漏斗模型啊
+
+[Capstone Project](https://wenwen.sogou.com/z/q702684389.htm)

@@ -1,0 +1,6 @@
+
+之后可以学习的地方
+
+1. Tests, confidence intervals
+1. Mathematical background
+

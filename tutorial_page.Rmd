@@ -13,3 +13,10 @@ Survival Analysis in R
 Heidi Seibold
 https://www.datacamp.com/courses/survival-analysis-in-r
 
+[证书](https://www.datacamp.com/statement-of-accomplishment/course/c9433244749d59585a19cd1f5a2a81215af479c5)
+
+```{r}
+knitr::include_graphics('statement_of_accomplishment.pdf')
+```
+
+如何加载pdf
