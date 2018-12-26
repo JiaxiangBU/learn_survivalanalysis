@@ -9,11 +9,15 @@ https://campus.datacamp.com/courses/survival-analysis-in-r/estimation-of-surviva
 Kaplan-Meier estimate
 读音参考[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/estimation-of-survival-curves?ex=1)
 
-<input type="checkbox" id="checkbox1" class="styled">rep bug
+<details>
+<summary>移动下载图片</summary>
+
 
 ```
 mv ~/Downloads/*.png figure/
 ```
+
+</details>
 
 ```{r fig.cap='Kaplan-Meier 参数估计'}
 knitr::include_graphics('figure/timeto_1.png')
@@ -43,8 +47,6 @@ km <- survfit(Surv(time, event) ~ 1)
 library(survminer)
 # ggsurvplot(km, conf.int = FALSE, risk.table = "nrisk_cumevents", legend = "none")
 ```
-
-<input type="checkbox" id="checkbox1" class="styled">ggsurvplot where
 
 Number at risk = number of event
 这是很直观的表达
@@ -182,7 +184,7 @@ surv_wb <- data.frame(time = t, surv = surv)
 head(surv_wb)
 ```
 
-<input type="checkbox" id="checkbox1" class="styled">covariates 一直在提到，会更加难。
+covariates 就是x
 
 ```{r}
 # Weibull model

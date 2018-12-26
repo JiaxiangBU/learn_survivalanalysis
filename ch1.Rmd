@@ -99,11 +99,6 @@ $P(T < t)$类似于CDF，因此$S(t)$是非常直观便于理解的。
 但是这里不是简单的$1 - P(T < t)$在于Kaplan-Meier曲线考虑了censor的情况
 见[DataCamp](https://campus.datacamp.com/courses/survival-analysis-in-r/estimation-of-survival-curves?ex=5)
 
-<input type="checkbox" id="checkbox1" class="styled">查看主营生存时间
-time 注册距离最大log时间
-event 今天还有没有记录
-
-
 ```{r fig.cap='有50%的人生存超过了3.7年'}
 knitr::include_graphics('figure/survival_fct_median.png')
 ```

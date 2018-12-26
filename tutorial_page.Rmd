@@ -31,6 +31,7 @@ list.files() %>%
             as_tibble
         ) %>% 
     bind_rows %>% 
-    filter(!value %>% str_detect('str_subset|str_remove_all'))
+    filter(!value %>% str_detect('str_subset|str_remove_all')) %>% 
+    .$value
 ```
 
