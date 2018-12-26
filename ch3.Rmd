@@ -115,7 +115,8 @@ dist = "lognormal")
 
 These are location-scale families for some transformation of time. 
 
-[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9) 家里网不好，用这个更新
+[campus](https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9)
+Weibull 会更高些，因为是最简单的假设，更自由一些，exponential 和 log-normal毕竟多了假设。
 
 ```{r}
 # Weibull model
