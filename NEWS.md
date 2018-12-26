@@ -5,6 +5,10 @@
 1. make public
 1. update readme
 1. knit ch2
+1. add cheatsheet
+1. add marketing_analytics.Rmd
+
+
 
 ### 2018-12-26 12:54:09
 

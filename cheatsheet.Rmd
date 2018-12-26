@@ -1,0 +1,6 @@
+https://github.com/rstudio/cheatsheets/raw/master/survminer.pdf
+
+```{r}
+knitr::include_graphics('survminer.pdf')
+```
+
