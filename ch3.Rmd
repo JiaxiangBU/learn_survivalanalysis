@@ -90,7 +90,6 @@ ggsurvplot_df(surv_wbmod, surv.geom = geom_line,
   linetype = "horTh", color = "tsize", legend.title = NULL)
 ```
 
-https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9
-
-Other distributions than Weibull
 书签
+Other distributions than Weibull
+https://campus.datacamp.com/courses/survival-analysis-in-r/the-weibull-model?ex=9
