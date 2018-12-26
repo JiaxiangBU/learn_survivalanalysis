@@ -19,4 +19,18 @@ https://www.datacamp.com/courses/survival-analysis-in-r
 knitr::include_graphics('statement_of_accomplishment.pdf')
 ```
 
-如何加载pdf
+<input type="checkbox" id="checkbox1" class="styled">如何加载pdf
+
+```{r}
+list.files() %>% 
+    str_subset('.Rmd$') %>% 
+    map(
+        ~xfun::read_utf8(.) %>% 
+            str_subset('checkbox') %>% 
+            str_remove_all('<input type="checkbox" id="checkbox1" class="styled">') %>% 
+            as_tibble
+        ) %>% 
+    bind_rows %>% 
+    filter(!value %>% str_detect('str_subset|str_remove_all'))
+```
+
