@@ -4,6 +4,7 @@
 1. clean some tasks
 1. make public
 1. update readme
+1. knit ch2
 
 ### 2018-12-26 12:54:09
 
