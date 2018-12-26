@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: add.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -10,5 +11,38 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-# learn_survivalanalysis
+
+
+主要参考 @Seibold2018 的教程，根据直觉理解而非很多的数学公式，适合入门。
+
+>
+Learn how to deal with time-to-event data and how to compute, visualize and interpret survivor curves as well as Weibull and Cox models.
+
+很好的介绍了 time-to-event data 的分析方式。
+
+2018-12-26 13:11:59 大体完成，见
+[完成总结](https://www.datacamp.com/statement-of-accomplishment/course/c9433244749d59585a19cd1f5a2a81215af479c5)
+
+```{r}
+knitr::include_graphics('statement_of_accomplishment.pdf')
+```
+
+<input type="checkbox" id="checkbox1" class="styled">如何加载pdf
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+list.files() %>% 
+    str_subset('.Rmd$') %>% 
+    map(
+        ~xfun::read_utf8(.) %>% 
+            str_subset('checkbox') %>% 
+            str_remove_all('<input type="checkbox" id="checkbox1" class="styled">') %>% 
+            as_tibble
+        ) %>% 
+    bind_rows %>% 
+    filter(!value %>% str_detect('str_subset|str_remove_all')) %>% 
+    .$value
+```
+
+<input type="checkbox" id="checkbox1" class="styled">总结之前的生存分析
 
