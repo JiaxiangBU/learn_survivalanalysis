@@ -130,6 +130,7 @@ how ignoring censoring underestimates your friends' dancing stamina? The correct
 
 ```{r}
 # Kaplan-Meier estimate
+data(GBSG2, package = "TH.data")
 km <- survfit(Surv(time,cens) ~ 1,data=GBSG2)
 
 # plot of the Kaplan-Meier estimate
