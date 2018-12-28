@@ -44,17 +44,18 @@ survminer 参考[rpkgs](https://rpkgs.datanovia.com/survminer/reference/ggsurvpl
 ```{r}
 time <- c(5, 6, 2, 4, 4) 
 event <- c(1, 0, 0, 1, 1)
+event_data <- data.frame(time = time, event = event)
 library(survival)
 km <- survfit(Surv(time, event) ~ 1)
 library(survminer)
-# ggsurvplot(km, conf.int = FALSE, risk.table = "nrisk_cumevents", legend = "none")
+ggsurvplot(km, data = event_data,conf.int = FALSE, risk.table = "nrisk_cumevents", legend = "none")
 ```
 
 Number at risk = number of event
 这是很直观的表达
 `legend = "none"`是因为只有一条线，不需要legend
 
-报错见[RStudio Community](https://community.rstudio.com/t/questions-for-the-input-of-function-survminer-ggsurvplot/20461)
+报错见[RStudio Community](https://community.rstudio.com/t/questions-for-the-input-of-function-survminer-ggsurvplot/20461)，记得加`data`
 
 1. `Surv()` is used to define the time-to-event outcome, 
 1. `survreg()` can be used to estimate a Weibull model (see upcoming lessons), and with 
