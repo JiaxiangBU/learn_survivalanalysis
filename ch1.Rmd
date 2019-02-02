@@ -57,6 +57,7 @@ Surv(time,event)
 参考
 [RStudio Community](https://community.rstudio.com/t/how-to-write-pipeline-in-the-survival-surv-function/20459)
 因为`Surv`不支持 built-in data 参数。
+
 ```{r}
 time <- c(5, 6, 2, 4, 4) 
 event <- c(1, 0, 0, 1, 1)

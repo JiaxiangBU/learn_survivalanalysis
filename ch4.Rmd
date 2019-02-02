@@ -49,7 +49,7 @@ newdat <- expand.grid(
 rownames(newdat) <- letters[1:6]
 
 # Compute survival curves
-cxsf <- survfit(cxmod, data = GBSG2, newdata = newdat, conf.type = "none")
+cxsf <- survfit(cxmod, data = GBSG2, newdata = newdat)
 
 library(tidyverse)
 library(survminer)
@@ -77,7 +77,7 @@ ggsurvplot_df(surv_cxmod, linetype = 'horTh', color = 'tsize',
   legend.title = NULL, censor = FALSE)
 ```
 
-相关报错已经提交[Github Issue](https://github.com/kassambara/survminer/issues/355)
+相关报错已经提交[Github Issue](https://github.com/kassambara/survminer/issues/355)，去掉`conf.type = "none"`
 
 https://campus.datacamp.com/courses/survival-analysis-in-r/the-cox-model?ex=7
 
